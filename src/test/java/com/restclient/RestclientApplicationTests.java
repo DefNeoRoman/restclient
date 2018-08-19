@@ -15,14 +15,6 @@ public class RestclientApplicationTests {
     RestTemplate restTemplate = new RestTemplate();
 
     @Test
-    public void allTests() {
-        getAllUsers();
-        getOneUser();
-        editOneUser();
-        deleteOneUser();
-    }
-
-    @Test
     public void getAllUsers() {
         String fooResourceUrl = "http://localhost:8080/rest/user/all";
         ResponseEntity<String> response = restTemplate.getForEntity(fooResourceUrl, String.class);
@@ -38,13 +30,14 @@ public class RestclientApplicationTests {
 
     @Test
     public void deleteOneUser() {
-        String entityUrl = "http://localhost:8080/rest/user/?id=1";
+        String entityUrl = "http://localhost:8080/rest/user/?id=2";
         restTemplate.delete(entityUrl);
         createOneUser();
         logger.info("User was deleted with id=1 and added in end");
     }
+
     @Test
-    public void createOneUser(){
+    public void createOneUser() {
         User newEmployee = new User();
         newEmployee.setName("fromRestClient");
         HttpHeaders headers = new HttpHeaders();
@@ -53,18 +46,18 @@ public class RestclientApplicationTests {
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<User> requestBody = new HttpEntity<>(newEmployee, headers);
         restTemplate.postForObject("http://localhost:8080/rest/user", requestBody, User.class);
-        logger.info("User was created {}",newEmployee.toString());
+        logger.info("User was created {}", newEmployee.toString());
 
     }
 
     @Test
-    public void editOneUser(){
+    public void editOneUser() {
         User updatedInstance = new User();
         String resourceUrl = "http://localhost:8080/rest/user/edit";
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(resourceUrl)
                 .queryParam("role_user", true)
                 .queryParam("role_admin", true);
-        updatedInstance.setId(2L);
+        updatedInstance.setId(3L);
         updatedInstance.setName("nameFromEditMethod");
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
