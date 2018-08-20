@@ -1,5 +1,6 @@
 package com.restclient;
 
+import com.restclient.dto.UserTO;
 import com.restclient.model.User;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -7,6 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class RestclientApplicationTests {
     private final
@@ -52,19 +56,20 @@ public class RestclientApplicationTests {
 
     @Test
     public void editOneUser() {
-        User updatedInstance = new User();
+        UserTO updatedInstance = new UserTO();
         String resourceUrl = "http://localhost:8080/rest/user/edit";
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(resourceUrl)
                 .queryParam("role_user", true)
                 .queryParam("role_admin", true);
         updatedInstance.setId(3L);
-        updatedInstance.setName("nameFromEditMethod");
+        updatedInstance.setName("nEditMethod");
+        Set<Long> roleIDs = new HashSet<>();
+        roleIDs.add(2L);
+        updatedInstance.setRolesID(roleIDs);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Accept", MediaType.APPLICATION_JSON_VALUE);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<User> requestUpdate = new HttpEntity<>(updatedInstance, headers);
-        restTemplate.exchange(builder.toUriString(), HttpMethod.PUT, requestUpdate, User.class);
-
+        HttpEntity<UserTO> requestUpdate = new HttpEntity<>(updatedInstance, headers);
+        restTemplate.exchange(resourceUrl,HttpMethod.PUT, requestUpdate, User.class);
     }
-
 }
